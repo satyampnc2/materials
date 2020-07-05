@@ -1,0 +1,67 @@
+1- BACKGROUND IMAGE
+
+body {
+    background-image: url('file-20180226-140213-yox11e.jpg');
+    background-repeat: no-repeat;
+    background-attachment : fixed;    
+    background-size: 100% 100%;
+}
+
+2- HOW TO BRING OBJECT TO THE CENTER OF SCREEN
+
+div{
+    width: 50%;
+    height: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+3- WRITING TEXT AT THE BOTTOM OF A DIV ELEMENT
+
+(first enclose it in a div component which has position property set relative)
+
+.bottomright {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  font-size: 18px;
+}
+
+4- ADDING FONT STYLE TO TEXT
+
+font-family: "Lucida Console", Courier, monospace;
+(We add 3 as if the browser failed to load one, then will go for next one.)
+
+
+5- DIFFERENCE BETWEEN JUSTIFY CONTENT AND ALIGN ITEMS AND ALIGN CONTENT
+
+    Justify-content will justify your flex items on main axix.
+    align-items will align your flex items on cross axis.
+    align-content will align multiple rows of your flex items in the cross axis.
+
+6 -  CSS ANIMATIONS
+
+    - TRANSFORM
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

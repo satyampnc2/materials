@@ -1,0 +1,256 @@
+
+
+1- JSX
+
+-> You can put any valid JavaScript expression inside the curly braces in JSX.
+Ex- const name = 'Josh Perez';
+const element = <h1>Hello, {name}</h1>;
+
+-> After compilation, JSX expressions become regular JavaScript function calls and evaluate to JavaScript objects.
+
+-> you can use JSX inside of if statements and for loops, assign it to variables, accept it as arguments, and return it from functions.
+Ex- function getGreeting(user) {
+  if (user) {
+    return <h1>Hello, {formatName(user)}!</h1>;
+  }
+  return <h1>Hello, Stranger.</h1>;
+}
+
+-> Specifying Attributes with JSX
+  -> You may use quotes to specify string literals as attributes:
+    Ex- const element = <div tabIndex="0"></div>;
+    <MyComponent message="hello world" />
+    <MyComponent message={'hello world'} />  // these two JSX expressions are equivalent.
+
+  -> You may also use curly braces to embed a JavaScript expression in an attribute.
+    Ex- const element = <img src={user.avatarUrl}></img>;
+
+-> JSX tags may contain children:
+    Ex- const element = (
+  <div>
+    <h1>Hello!</h1>
+    <h2>Good to see you here.</h2>
+  </div>
+);
+
+-> Babel compiles JSX down to React.createElement() calls.
+
+
+
+2- RENDERING ELEMENTS
+
+-> Elements are the smallest building blocks of React apps.
+
+-> There has to be a root DOM node because everything inside it will be managed by react DOM.
+Ex- <div id="root"></div>
+  
+To render a React element into a root DOM node, pass both to ReactDOM.render():
+const element = <h1>Hello, world</h1>;
+ReactDOM.render(element, document.getElementById('root'));
+
+-> React DOM compares the element and its children to the previous one, and only applies the DOM updates necessary to bring the DOM to the desired state.
+
+
+3- COMPONENTS and PROPS
+
+-> Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
+
+-> There are two types of component( functional and class).
+
+Ex-> function Welcome(props) {                 // EXAMPLE OF FUNCTIONAL COMPONENT
+  return <h1>Hello, {props.name}</h1>;
+}
+ 
+   class Welcome extends React.Component {    // EXAMPLE OF ES6 CLASS COMPONENT
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+
+
+-> Always start component names with a capital letter.
+
+
+4- STATE AND LIFECYCLE
+
+-> State is similar to props, but it is private and fully controlled by the component.
+
+-> The render method will be called each time an update happens to the state of the component.
+
+-> Class components should always call the base constructor with props. And Initial state has to be declared in the constructor only.
+Ex- constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+-> The componentDidMount() method runs after the component output has been rendered to the DOM.
+
+
+-> Do not modify state directly. Modify it only using setState().
+ Ex- this.setState({comment: 'Hello'});
+
+-> setState() can accept an object and a function.
+Ex- When it accepts and object it simply merges the current state with this object.
+
+And when we have to use previous state or props values to evaluate the current state then we should use the function.
+Ex- this.setState(function(state, props) {
+  return {
+    counter: state.counter + props.increment
+  };
+});
+
+or by using arrow function
+
+
+5- HANDLING EVENTS
+
+-> Handling events with React elements is very similar to handling events on DOM elements. There are some syntax differences:
+  - React events are named using camelCase, rather than lowercase.
+  - With JSX you pass a function as the event handler, rather than a string.
+Ex- <button onclick="activateLasers()">   // IN HTML
+  Activate Lasers
+</button>
+
+<button onClick={activateLasers}>      // IN JSX
+  Activate Lasers
+</button>
+
+-> Another difference is that you cannot return false to prevent default behavior in React. You must call preventDefault explicitly. 
+Ex-  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+  }
+
+
+->  In JavaScript, class methods are not bound by default. You have to explicitaly bound them into constructor.
+
+-> Passing Arguments to event handler.
+Both will work.
+<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+
+
+
+6- CONDITIONAL RENDERING
+
+-> in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false.
+Ex- <div>
+      <h1>Hello!</h1>
+      {unreadMessages.length > 0 &&
+        <h2>
+          You have {unreadMessages.length} unread messages.
+        </h2>
+      }
+    </div>
+
+-> Inline else if
+Ex- <div>
+      The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
+    </div>
+
+
+(NOTE- Note how we used the ES6 computed property name syntax to update the state key corresponding to the given input name:
+
+this.setState({
+  [name]: value
+}); )
+
+
+
+7- LIFTING STATES UP
+
+-> In React, sharing state is accomplished by moving it up to the closest common ancestor of the components that need it. This is called “lifting state up”. 
+
+-> Refer react documentation
+
+
+8- COMPOSITION
+
+-> Passing component as a prop
+
+Ex- function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <SplitPane
+      left={
+        <Contacts />
+      }
+      right={
+        <Chat />
+      } />
+  );
+}
+
+
+9- CONTEXT 
+
+
+-> Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
+
+-> API 
+    
+    const MyContext = React.createContext(defaultValue);
+    Creates a Context object. When React renders a component that subscribes to this Context object it will read the current context value from the closest matching Provider above it in the tree.
+
+
+-> CONTEXT PROVIDER
+
+    <MyContext.Provider value={/* some value */}>
+     - Every Context object comes with a Provider React component that allows consuming components to subscribe to context changes.
+
+     - All consumers that are descendants of a Provider will re-render whenever the Provider’s value prop changes.
+
+-> contextType
+
+     - MyClass.contextType = MyContext; // or static contextType = MyContext;
+     - The contextType property on a class can be assigned a Context object created by React.createContext(). This lets you consume the nearest current value of that Context type using this.context. You can reference this in any of the lifecycle methods including the render function.
+
+        let value = this.context;
+
+     - You can only subscribe to a single context using this API.
+
+
+-> context.Consumer
+
+     - This lets you subscribe to a context within a function component.
+
+     - <MyContext.Consumer>
+  {value => /* render something based on the context value */}
+</MyContext.Consumer>
+
+
+(NOTE - FOR MORE INFO ABOUT JSX DO WATCH IT FROM DOCUMENTATION)
+
+
+
+
+
+10- HOOKS
+
+
+- They let you use state and other React features without writing a class.
+
+
+
+
+
+
+
+
+
+
+
+
